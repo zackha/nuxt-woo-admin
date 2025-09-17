@@ -6,7 +6,7 @@ export const orderBadge = (s: string) =>
 
 export const productBadge = (s: string) => (s === 'publish' && 'badge badge--ok') || (['draft', 'pending'].includes(s) && 'badge badge--warn') || 'badge';
 
-export const priceText = (p: any) => (p?.sale_price && p.sale_price !== '0' ? `${p.sale_price} (sale)` : p?.price || p?.regular_price || '—');
+export const priceText = (p: any) => (p?.sale_price && p.sale_price !== '0' ? `${p.sale_price} (sale)` : `$${p?.price}` || `$${p?.regular_price}` || '—');
 
 export const stockText = (p: any) =>
   p?.stock_status === 'instock'

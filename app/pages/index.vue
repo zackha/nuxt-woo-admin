@@ -29,13 +29,13 @@ const products = computed(() => productsRes.value?.data || []);
         <NuxtLink to="/orders" class="text-sm link">view all →</NuxtLink>
       </div>
       <div v-if="ordersError" class="err">{{ (ordersError as any).message }}</div>
-      <div v-else-if="ordersPending" class="loading">Loading</div>
+      <div v-else-if="ordersPending" class="loading h-64">Loading</div>
       <div v-else>
         <Table fixed>
           <colgroup>
-            <col style="width: 88px" />
+            <col style="width: 68px" />
             <col />
-            <col style="width: 120px" />
+            <col style="width: 68px" />
             <col style="width: 120px" />
           </colgroup>
           <thead>
@@ -54,7 +54,7 @@ const products = computed(() => productsRes.value?.data || []);
               <td class="min-w-0">
                 <span class="truncate block">{{ [o.billing?.first_name, o.billing?.last_name].filter(Boolean).join(' ') || '—' }}</span>
               </td>
-              <td>{{ o.total }} {{ o.currency }}</td>
+              <td>${{ o.total }}</td>
               <td class="text-end">
                 <Badge
                   :tone="
@@ -82,14 +82,14 @@ const products = computed(() => productsRes.value?.data || []);
         <NuxtLink to="/products" class="text-sm link">view all →</NuxtLink>
       </div>
       <div v-if="productsError" class="err">{{ (productsError as any).message }}</div>
-      <div v-else-if="productsPending" class="loading">Loading</div>
+      <div v-else-if="productsPending" class="loading h-64">Loading</div>
       <div v-else>
         <Table fixed>
           <colgroup>
-            <col style="width: 88px" />
+            <col style="width: 54px" />
             <col />
-            <col style="width: 140px" />
-            <col style="width: 120px" />
+            <col style="width: 60px" />
+            <col style="width: 100px" />
           </colgroup>
           <thead>
             <tr>

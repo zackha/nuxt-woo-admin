@@ -43,13 +43,14 @@ async function handleAddNote() {
 </script>
 
 <template>
-  <section class="space-y-3">
+  <section class="space-y-6">
+    <div><NuxtLink to="/orders" class="link">← Back</NuxtLink></div>
+
     <div v-if="error" class="err">{{ (error as any).message }}</div>
     <div v-else-if="pending" class="loading">Loading</div>
 
     <div v-else-if="order" class="space-y-4">
       <div class="flex items-center gap-2">
-        <NuxtLink to="/orders" class="link">← Back</NuxtLink>
         <h1 class="text-lg">Order #{{ order.id }}</h1>
       </div>
 
@@ -127,7 +128,7 @@ async function handleAddNote() {
         <ul class="text-sm space-y-2">
           <li v-for="n in notes" :key="n.id" class="border rounded p-2" :style="{ borderColor: 'var(--line)' }">
             <div class="opacity-60 text-xs">{{ new Date(n.date_created).toLocaleString() }}</div>
-            <div>{{ n.note }}</div>
+            <div v-html="n.note"></div>
           </li>
         </ul>
       </Card>

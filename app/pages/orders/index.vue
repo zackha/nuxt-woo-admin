@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { formatDistanceToNow } from 'date-fns';
 const { public: pub } = useRuntimeConfig();
 const perPage = Number(pub.defaultPerPage || 20);
 
@@ -51,16 +52,16 @@ const prevPage = () => {
     </div>
 
     <div v-if="error" class="err">{{ (error as any).message }}</div>
-    <div v-else-if="pending" class="loading">Loading</div>
+    <div v-else-if="pending" class="loading h-72">Loading</div>
 
     <Card v-else class="overflow-x-auto">
       <Table fixed>
         <colgroup>
           <col style="width: 88px" />
           <col />
+          <col style="width: 90px" />
           <col style="width: 140px" />
-          <col style="width: 140px" />
-          <col style="width: 180px" />
+          <col style="width: 160px" />
         </colgroup>
         <thead>
           <tr>
@@ -68,7 +69,7 @@ const prevPage = () => {
             <th>Customer</th>
             <th>Total</th>
             <th>Status</th>
-            <th>Date</th>
+            <th class="!text-end">Date</th>
           </tr>
         </thead>
         <tbody>
@@ -79,10 +80,12 @@ const prevPage = () => {
             <td class="min-w-0">
               <span class="truncate block">
                 {{ [o.billing?.first_name, o.billing?.last_name].filter(Boolean).join(' ') || '—' }}
-                <template v-if="o.billing?.email">· {{ o.billing.email }}</template>
+                <template v-if="o.billing?.email">
+                  <span class="text-white/30">· {{ o.billing.email }}</span>
+                </template>
               </span>
             </td>
-            <td>{{ o.total }} {{ o.currency }}</td>
+            <td>${{ o.total }}</td>
             <td>
               <Badge
                 :tone="
@@ -97,7 +100,7 @@ const prevPage = () => {
                 {{ o.status }}
               </Badge>
             </td>
-            <td>{{ new Date(o.date_created).toLocaleString() }}</td>
+            <td class="text-end">{{ formatDistanceToNow(new Date(o.date_created)) }}</td>
           </tr>
         </tbody>
       </Table>

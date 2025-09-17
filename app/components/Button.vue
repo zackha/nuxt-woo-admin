@@ -12,5 +12,5 @@ const klass = computed(() => ({
 </script>
 
 <template>
-  <button :class="klass" :disabled="disabled"><slot /></button>
+  <button :class="[klass, { disabled: props.disabled }]" :disabled="props.disabled"><slot /></button>
 </template>

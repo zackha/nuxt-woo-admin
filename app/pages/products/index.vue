@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { formatDistanceToNow } from 'date-fns';
 const { public: pub } = useRuntimeConfig();
 const perPage = Number(pub.defaultPerPage || 20);
 
@@ -58,12 +59,12 @@ const prevPage = () => {
     <div v-else class="card overflow-x-auto">
       <table class="table table-fixed">
         <colgroup>
-          <col style="width: 88px" />
-          <col />
+          <col style="width: 66px" />
+          <col style="min-width: 52px" />
+          <col style="width: 90px" />
           <col style="width: 120px" />
-          <col style="width: 160px" />
           <col style="width: 120px" />
-          <col style="width: 180px" />
+          <col style="width: 136px" />
         </colgroup>
         <thead>
           <tr>
@@ -99,7 +100,7 @@ const prevPage = () => {
                 {{ p.status }}
               </span>
             </td>
-            <td class="text-end">{{ new Date(p.date_created).toLocaleString() }}</td>
+            <td class="text-end">{{ formatDistanceToNow(new Date(p.date_created)) }}</td>
           </tr>
         </tbody>
       </table>

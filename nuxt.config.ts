@@ -19,7 +19,4 @@ export default defineNuxtConfig({
     plugins: [tailwindcss()],
   },
   css: ['~/assets/css/main.css'],
-  routeRules: {
-    '/api/woo/wc/v3/orders': { swr: 15 },
-  },
 });

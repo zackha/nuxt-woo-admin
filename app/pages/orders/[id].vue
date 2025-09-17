@@ -5,14 +5,17 @@ const id = route.params.id as string;
 
 const { getById, getNotes, updateStatus, addNote } = useOrders();
 
-const { data: orderRes, pending, error, refresh } = await useAsyncData(() => getById(id));
+const { data: orderRes, pending, error, refresh } = useAsyncData(() => getById(id), { lazy: true, server: false, default: () => ({ data: null }) });
 const order = computed(() => orderRes.value?.data);
 
-const { data: notesRes, refresh: refreshNotes } = await useAsyncData(() => getNotes(id));
+const { data: notesRes, refresh: refreshNotes } = useAsyncData(() => getNotes(id), { lazy: true, server: false, default: () => ({ data: [] }) });
 const notes = computed(() => notesRes.value?.data || []);
 
 const statuses = ['pending', 'processing', 'completed', 'on-hold', 'cancelled', 'refunded', 'failed'];
-const newStatus = ref(order.value?.status || 'processing');
+const newStatus = ref('processing');
+watch(order, o => {
+  if (o?.status) newStatus.value = o.status;
+});
 const noteText = ref('');
 
 async function handleStatusUpdate() {
@@ -43,7 +46,7 @@ async function handleAddNote() {
     </div>
 
     <div v-if="error" class="text-red-600 text-sm">{{ (error as any).message }}</div>
-    <div v-else-if="pending">Loading…</div>
+    <div v-else-if="pending" class="text-sm opacity-70">Loading…</div>
 
     <div v-else-if="order" class="space-y-4">
       <h1 class="text-lg font-semibold">Order #{{ order.id }}</h1>
@@ -78,16 +81,16 @@ async function handleAddNote() {
         <table class="w-full text-sm border-collapse">
           <thead>
             <tr class="border-b">
-              <th class="text-left py-2">Name</th>
-              <th class="text-left py-2">Qty</th>
-              <th class="text-left py-2">Total</th>
+              <th class="table-th">Name</th>
+              <th class="table-th">Qty</th>
+              <th class="table-th">Total</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="li in order.line_items || []" :key="li.id" class="border-b">
-              <td class="py-2">{{ li.name }}</td>
-              <td class="py-2">{{ li.quantity }}</td>
-              <td class="py-2">{{ li.total }}</td>
+              <td class="table-td">{{ li.name }}</td>
+              <td class="table-td">{{ li.quantity }}</td>
+              <td class="table-td">{{ li.total }}</td>
             </tr>
           </tbody>
         </table>
@@ -96,16 +99,16 @@ async function handleAddNote() {
       <div class="grid md:grid-cols-2 gap-4">
         <div class="border rounded p-3 space-y-2">
           <h2 class="font-semibold">Update Status</h2>
-          <select v-model="newStatus" class="border px-3 py-2 text-sm rounded mr-2">
+          <select v-model="newStatus" class="input mr-2">
             <option v-for="s in statuses" :key="s" :value="s">{{ s }}</option>
           </select>
-          <button @click="handleStatusUpdate" class="border px-3 py-2 text-sm rounded">Update</button>
+          <button @click="handleStatusUpdate" class="btn">Update</button>
         </div>
 
         <div class="border rounded p-3 space-y-2">
           <h2 class="font-semibold">Add Note</h2>
-          <textarea v-model="noteText" rows="3" class="border w-full px-3 py-2 text-sm rounded" placeholder="Internal note…" />
-          <button @click="handleAddNote" class="border px-3 py-2 text-sm rounded">Add Note</button>
+          <textarea v-model="noteText" rows="3" class="input w-full" placeholder="Internal note…" />
+          <button @click="handleAddNote" class="btn">Add Note</button>
         </div>
       </div>
 

@@ -22,7 +22,7 @@ const statuses = [
 
 const { list } = useOrders();
 
-const { data, pending, error, refresh } = await useAsyncData(
+const { data, pending, error } = useAsyncData(
   () =>
     list({
       page: page.value,
@@ -30,7 +30,12 @@ const { data, pending, error, refresh } = await useAsyncData(
       search: search.value || undefined,
       status: status.value === 'any' ? undefined : status.value,
     }),
-  { watch: [page, search, status] }
+  {
+    watch: [page, search, status],
+    lazy: true,
+    server: false,
+    default: () => ({ data: [], meta: {} }),
+  }
 );
 
 watch([page, search, status], () => {
@@ -58,8 +63,8 @@ function prevPage() {
 <template>
   <div class="space-y-4">
     <div class="flex flex-wrap items-center gap-2">
-      <input v-model="search" placeholder="Search (order/email)" class="border px-3 py-2 text-sm rounded w-60" />
-      <select v-model="status" class="border px-3 py-2 text-sm rounded">
+      <input v-model="search" placeholder="Search (order/email)" class="input w-60" />
+      <select v-model="status" class="input">
         <option v-for="s in statuses" :key="s.value" :value="s.value">{{ s.label }}</option>
       </select>
       <span class="text-xs opacity-70">Per page: {{ perPage }}</span>
@@ -67,38 +72,44 @@ function prevPage() {
 
     <div v-if="error" class="text-red-600 text-sm">{{ (error as any).message }}</div>
 
-    <div v-if="pending">Loading…</div>
+    <div v-if="pending" class="text-sm opacity-70">Loading…</div>
 
     <table v-else class="w-full text-sm border-collapse">
       <thead>
         <tr class="border-b">
-          <th class="text-left py-2">ID</th>
-          <th class="text-left py-2">Customer</th>
-          <th class="text-left py-2">Total</th>
-          <th class="text-left py-2">Status</th>
-          <th class="text-left py-2">Date</th>
+          <th class="table-th">ID</th>
+          <th class="table-th">Customer</th>
+          <th class="table-th">Total</th>
+          <th class="table-th">Status</th>
+          <th class="table-th">Date</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="o in items" :key="o.id" class="border-b">
-          <td class="py-2">
+          <td class="table-td">
             <NuxtLink :to="`/orders/${o.id}`" class="underline">#{{ o.id }}</NuxtLink>
           </td>
-          <td class="py-2">
+          <td class="table-td">
             {{ [o.billing?.first_name, o.billing?.last_name].filter(Boolean).join(' ') || '—' }}
             <span v-if="o.billing?.email" class="opacity-60">· {{ o.billing.email }}</span>
           </td>
-          <td class="py-2">{{ o.total }} {{ o.currency }}</td>
-          <td class="py-2">{{ o.status }}</td>
-          <td class="py-2">{{ new Date(o.date_created).toLocaleString() }}</td>
+          <td class="table-td">{{ o.total }} {{ o.currency }}</td>
+          <td class="table-td">
+            <span class="badge">
+              {{ o.status }}
+            </span>
+          </td>
+          <td class="table-td">
+            {{ new Date(o.date_created).toLocaleString() }}
+          </td>
         </tr>
       </tbody>
     </table>
 
     <div class="flex items-center justify-between pt-2">
-      <button @click="prevPage" :disabled="page === 1" class="border px-3 py-1 rounded text-sm">Prev</button>
+      <button @click="prevPage" :disabled="page === 1" class="btn">Prev</button>
       <div class="text-xs opacity-70">Page {{ page }} / {{ meta.totalPages || 1 }} · Total {{ meta.total ?? '—' }}</div>
-      <button @click="nextPage" :disabled="meta.totalPages && page >= meta.totalPages" class="border px-3 py-1 rounded text-sm">Next</button>
+      <button @click="nextPage" :disabled="meta.totalPages && page >= meta.totalPages" class="btn">Next</button>
     </div>
   </div>
 </template>

@@ -1,5 +1,4 @@
 // app/composables/useOrders.ts
-
 export type Order = {
   id: number;
   status: string;
@@ -13,6 +12,7 @@ export type Order = {
 export const useOrders = () => {
   const { call } = useWoo();
 
+  // /api/woo/orders -> wc/v3/orders
   const list = async (params: { page?: number; per_page?: number; status?: string; search?: string }) => {
     return call<Order[]>(`/orders`, { method: 'GET', query: params });
   };

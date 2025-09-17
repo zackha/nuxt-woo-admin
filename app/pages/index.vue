@@ -23,15 +23,15 @@ const products = computed(() => productsRes.value?.data || []);
 
 <template>
   <section class="grid md:grid-cols-2 gap-4">
-    <div class="card">
+    <Card>
       <div class="flex items-center justify-between mb-2">
         <h2 class="text-base">Orders</h2>
-        <NuxtLink to="/orders" class="text-sm">view all →</NuxtLink>
+        <NuxtLink to="/orders" class="text-sm link">view all →</NuxtLink>
       </div>
       <div v-if="ordersError" class="err">{{ (ordersError as any).message }}</div>
       <div v-else-if="ordersPending" class="loading">Loading</div>
       <div v-else>
-        <table class="table table-fixed">
+        <Table fixed>
           <colgroup>
             <col style="width: 88px" />
             <col />
@@ -56,27 +56,35 @@ const products = computed(() => productsRes.value?.data || []);
               </td>
               <td>{{ o.total }} {{ o.currency }}</td>
               <td class="text-end">
-                <span :class="orderBadge(o.status)">
-                  <span class="badge-dot"></span>
+                <Badge
+                  :tone="
+                    ['completed', 'processing'].includes(o.status)
+                      ? 'ok'
+                      : ['on-hold', 'pending'].includes(o.status)
+                      ? 'warn'
+                      : ['cancelled', 'refunded', 'failed', 'trash'].includes(o.status)
+                      ? 'err'
+                      : ''
+                  ">
                   {{ o.status }}
-                </span>
+                </Badge>
               </td>
             </tr>
             <tr v-if="!orders.length"><td colspan="4" class="empty">No orders found.</td></tr>
           </tbody>
-        </table>
+        </Table>
       </div>
-    </div>
+    </Card>
 
-    <div class="card">
+    <Card>
       <div class="flex items-center justify-between mb-2">
         <h2 class="text-base">Products</h2>
-        <NuxtLink to="/products" class="text-sm">view all →</NuxtLink>
+        <NuxtLink to="/products" class="text-sm link">view all →</NuxtLink>
       </div>
       <div v-if="productsError" class="err">{{ (productsError as any).message }}</div>
       <div v-else-if="productsPending" class="loading">Loading</div>
       <div v-else>
-        <table class="table table-fixed">
+        <Table fixed>
           <colgroup>
             <col style="width: 88px" />
             <col />
@@ -104,16 +112,15 @@ const products = computed(() => productsRes.value?.data || []);
               </td>
               <td>{{ priceText(p) }}</td>
               <td class="text-end">
-                <span :class="productBadge(p.status)">
-                  <span class="badge-dot"></span>
+                <Badge :tone="p.status === 'publish' ? 'ok' : ['draft', 'pending'].includes(p.status) ? 'warn' : ''">
                   {{ p.status }}
-                </span>
+                </Badge>
               </td>
             </tr>
             <tr v-if="!products.length"><td colspan="4" class="empty">No products found.</td></tr>
           </tbody>
-        </table>
+        </Table>
       </div>
-    </div>
+    </Card>
   </section>
 </template>

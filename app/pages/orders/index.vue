@@ -27,13 +27,7 @@ const { data, pending, error } = useAsyncData(
 );
 
 watch([page, search, status], () => {
-  router.replace({
-    query: {
-      page: String(page.value),
-      ...(search.value && { search: search.value }),
-      ...(status.value !== 'any' && { status: status.value }),
-    },
-  });
+  router.replace({ query: { page: String(page.value), ...(search.value && { search: search.value }), ...(status.value !== 'any' && { status: status.value }) } });
 });
 
 const items = computed(() => data.value?.data || []);
@@ -59,8 +53,8 @@ const prevPage = () => {
     <div v-if="error" class="err">{{ (error as any).message }}</div>
     <div v-else-if="pending" class="loading">Loading</div>
 
-    <div v-else class="card overflow-x-auto">
-      <table class="table table-fixed">
+    <Card v-else class="overflow-x-auto">
+      <Table fixed>
         <colgroup>
           <col style="width: 88px" />
           <col />
@@ -90,21 +84,29 @@ const prevPage = () => {
             </td>
             <td>{{ o.total }} {{ o.currency }}</td>
             <td>
-              <span :class="orderBadge(o.status)">
-                <span class="badge-dot"></span>
+              <Badge
+                :tone="
+                  ['completed', 'processing'].includes(o.status)
+                    ? 'ok'
+                    : ['on-hold', 'pending'].includes(o.status)
+                    ? 'warn'
+                    : ['cancelled', 'refunded', 'failed', 'trash'].includes(o.status)
+                    ? 'err'
+                    : ''
+                ">
                 {{ o.status }}
-              </span>
+              </Badge>
             </td>
             <td>{{ new Date(o.date_created).toLocaleString() }}</td>
           </tr>
         </tbody>
-      </table>
-    </div>
+      </Table>
+    </Card>
 
     <div class="pager">
-      <button @click="prevPage" :disabled="page === 1" class="btn btn-ghost">[ Prev ]</button>
+      <Button variant="ghost" @click="prevPage" :disabled="page === 1">[ Prev ]</Button>
       <div class="hint">Page {{ page }} / {{ meta.totalPages || 1 }} · Total {{ meta.total ?? '—' }}</div>
-      <button @click="nextPage" :disabled="meta.totalPages && page >= meta.totalPages" class="btn btn-ghost">[ Next ]</button>
+      <Button variant="ghost" @click="nextPage" :disabled="meta.totalPages && page >= meta.totalPages">[ Next ]</Button>
     </div>
   </section>
 </template>

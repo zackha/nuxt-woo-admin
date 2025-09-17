@@ -54,10 +54,8 @@ body::before {
 .container-retro {
   max-width: 56rem;
   margin: 1.25rem auto;
-  overflow: hidden;
   box-shadow: 0 0 0 1px var(--line) inset, 0 12px 24px #00000040, 0 0 120px 0 var(--crt);
   background: linear-gradient(180deg, var(--panel), var(--paper));
-  overflow: hidden;
   border-radius: var(--radius);
 }
 .retro-header {

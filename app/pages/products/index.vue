@@ -24,13 +24,7 @@ const { data, pending, error } = useAsyncData(
 );
 
 watch([page, search, status], () => {
-  router.replace({
-    query: {
-      page: String(page.value),
-      ...(search.value && { search: search.value }),
-      ...(status.value !== 'any' && { status: status.value }),
-    },
-  });
+  router.replace({ query: { page: String(page.value), ...(search.value && { search: search.value }), ...(status.value !== 'any' && { status: status.value }) } });
 });
 
 const items = computed(() => data.value?.data || []);
@@ -46,18 +40,18 @@ const prevPage = () => {
 <template>
   <section class="space-y-4">
     <div class="controls">
-      <input v-model="search" placeholder="Search (name/sku)" class="input w-64" />
+      <input v-model="search" placeholder="SEARCH (NAME/SKU)" class="input w-64" />
       <select v-model="status" class="input">
-        <option v-for="s in statuses" :key="s.value" :value="s.value">{{ s.label }}</option>
+        <option v-for="s in statuses" :key="s.value" :value="s.value">{{ s.label.toUpperCase() }}</option>
       </select>
-      <span class="hint">per page: {{ perPage }}</span>
+      <span class="hint">PER PAGE: {{ perPage }}</span>
     </div>
 
     <div v-if="error" class="err">{{ (error as any).message }}</div>
     <div v-else-if="pending" class="loading">Loading</div>
 
-    <div v-else class="card overflow-x-auto">
-      <table class="table table-fixed">
+    <Card v-else class="overflow-x-auto">
+      <Table fixed>
         <colgroup>
           <col style="width: 66px" />
           <col style="min-width: 52px" />
@@ -69,11 +63,11 @@ const prevPage = () => {
         <thead>
           <tr>
             <th>ID</th>
-            <th>Item</th>
-            <th>Price</th>
-            <th>Stock</th>
-            <th>Status</th>
-            <th class="!text-end">Date</th>
+            <th>ITEM</th>
+            <th>PRICE</th>
+            <th>STOCK</th>
+            <th>STATUS</th>
+            <th class="!text-end">DATE</th>
           </tr>
         </thead>
         <tbody>
@@ -83,7 +77,7 @@ const prevPage = () => {
             </td>
             <td class="min-w-0">
               <div class="flex items-center gap-3 min-w-0">
-                <img v-if="p.image" :src="p.image.src" :alt="p.image.alt" class="thumb-lg" />
+                <img v-if="p.image" :src="p.image.src" :alt="p.image.alt" class="thumb" />
                 <span class="truncate block" :title="p.name">{{ p.name }}</span>
               </div>
             </td>
@@ -95,21 +89,18 @@ const prevPage = () => {
               </span>
             </td>
             <td>
-              <span :class="productBadge(p.status)">
-                <span class="badge-dot"></span>
-                {{ p.status }}
-              </span>
+              <Badge :tone="p.status === 'publish' ? 'ok' : ['draft', 'pending'].includes(p.status) ? 'warn' : ''">{{ p.status }}</Badge>
             </td>
             <td class="text-end">{{ formatDistanceToNow(new Date(p.date_created)) }}</td>
           </tr>
         </tbody>
-      </table>
-    </div>
+      </Table>
+    </Card>
 
     <div class="pager">
-      <button @click="prevPage" :disabled="page === 1" class="btn btn-ghost">[ Prev ]</button>
-      <div class="hint">Page {{ page }} / {{ meta.totalPages || 1 }} · Total {{ meta.total ?? '—' }}</div>
-      <button @click="nextPage" :disabled="meta.totalPages && page >= meta.totalPages" class="btn btn-ghost">[ Next ]</button>
+      <Button variant="ghost" @click="prevPage" :disabled="page === 1">PREV</Button>
+      <div class="hint">PAGE {{ page }} / {{ meta.totalPages || 1 }} · TOTAL {{ meta.total ?? '—' }}</div>
+      <Button variant="ghost" @click="nextPage" :disabled="meta.totalPages && page >= meta.totalPages">NEXT</Button>
     </div>
   </section>
 </template>

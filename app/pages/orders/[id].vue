@@ -44,19 +44,19 @@ async function handleAddNote() {
 
 <template>
   <section class="space-y-6">
-    <div><NuxtLink to="/orders" class="link">← Back</NuxtLink></div>
+    <NuxtLink to="/orders" class="link hud-title">BACK</NuxtLink>
 
     <div v-if="error" class="err">{{ (error as any).message }}</div>
     <div v-else-if="pending" class="loading">Loading</div>
 
     <div v-else-if="order" class="space-y-4">
-      <div class="flex items-center gap-2">
-        <h1 class="text-lg">Order #{{ order.id }}</h1>
+      <div class="flex items-center gap-3">
+        <h1 class="hud-title">ORDER #{{ order.id }}</h1>
       </div>
 
       <div class="grid md:grid-cols-2 gap-4">
         <Card>
-          <h2 class="mb-2">Summary</h2>
+          <div class="hud-title mb-2">SUMMARY</div>
           <div class="text-sm space-y-1">
             <div>
               Status:
@@ -71,7 +71,7 @@ async function handleAddNote() {
         </Card>
 
         <Card>
-          <h2 class="mb-2">Customer</h2>
+          <div class="hud-title mb-2">CUSTOMER</div>
           <div class="text-sm space-y-1">
             <div>{{ [order.billing?.first_name, order.billing?.last_name].filter(Boolean).join(' ') || '—' }}</div>
             <div>{{ order.billing?.email || '—' }}</div>
@@ -80,14 +80,14 @@ async function handleAddNote() {
       </div>
 
       <Card>
-        <h2 class="mb-2">Line Items</h2>
+        <div class="hud-title mb-2">LINE ITEMS</div>
         <div class="overflow-x-auto">
           <Table>
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Qty</th>
-                <th>Total</th>
+                <th>NAME</th>
+                <th>QTY</th>
+                <th>TOTAL</th>
               </tr>
             </thead>
             <tbody>
@@ -103,32 +103,32 @@ async function handleAddNote() {
 
       <div class="grid md:grid-cols-2 gap-4">
         <Card class="space-y-2">
-          <h2>Update Status</h2>
+          <div class="hud-title">UPDATE STATUS</div>
           <select v-model="newStatus" class="input" :disabled="updatingStatus">
-            <option v-for="s in statuses" :key="s" :value="s">{{ s }}</option>
+            <option v-for="s in statuses" :key="s" :value="s">{{ s.toUpperCase() }}</option>
           </select>
           <Button variant="strong" :disabled="updatingStatus" @click="handleStatusUpdate">
-            <template v-if="updatingStatus">[ Updating… ]</template>
-            <template v-else>[ Update ]</template>
+            <template v-if="updatingStatus">UPDATING…</template>
+            <template v-else>UPDATE</template>
           </Button>
         </Card>
 
         <Card class="space-y-2">
-          <h2>Add Note</h2>
-          <textarea v-model="noteText" rows="3" class="input w-full" placeholder="Internal note…" :disabled="addingNote"></textarea>
+          <div class="hud-title">ADD NOTE</div>
+          <textarea v-model="noteText" rows="3" class="input w-full" placeholder="INTERNAL NOTE…" :disabled="addingNote"></textarea>
           <Button variant="ghost" :disabled="addingNote || !noteText.trim()" @click="handleAddNote">
-            <template v-if="addingNote">[ Adding… ]</template>
-            <template v-else>[ Add Note ]</template>
+            <template v-if="addingNote">ADDING…</template>
+            <template v-else>ADD NOTE</template>
           </Button>
         </Card>
       </div>
 
       <Card>
-        <h2 class="mb-2">Notes</h2>
+        <div class="hud-title mb-2">NOTES</div>
         <ul class="text-sm space-y-2">
-          <li v-for="n in notes" :key="n.id" class="border rounded p-2" :style="{ borderColor: 'var(--line)' }">
+          <li v-for="n in notes" :key="n.id" class="border p-2">
             <div class="opacity-60 text-xs">{{ new Date(n.date_created).toLocaleString() }}</div>
-            <div v-html="n.note"></div>
+            <div>{{ n.note }}</div>
           </li>
         </ul>
       </Card>

@@ -44,15 +44,15 @@ const prevPage = () => {
 <template>
   <section class="space-y-4">
     <div class="controls">
-      <input v-model="search" placeholder="Search (order/email)" class="input w-64" />
+      <input v-model="search" placeholder="SEARCH (ORDER/EMAIL)" class="input w-64" />
       <select v-model="status" class="input">
-        <option v-for="s in statuses" :key="s.value" :value="s.value">{{ s.label }}</option>
+        <option v-for="s in statuses" :key="s.value" :value="s.value">{{ s.label.toUpperCase() }}</option>
       </select>
-      <span class="hint">per page: {{ perPage }}</span>
+      <span class="hint">PER PAGE: {{ perPage }}</span>
     </div>
 
     <div v-if="error" class="err">{{ (error as any).message }}</div>
-    <div v-else-if="pending" class="loading h-72">Loading</div>
+    <div v-else-if="pending" class="loading h-64">Loading</div>
 
     <Card v-else class="overflow-x-auto">
       <Table fixed>
@@ -66,10 +66,10 @@ const prevPage = () => {
         <thead>
           <tr>
             <th>ID</th>
-            <th>Customer</th>
-            <th>Total</th>
-            <th>Status</th>
-            <th class="!text-end">Date</th>
+            <th>CUSTOMER</th>
+            <th>TOTAL</th>
+            <th>STATUS</th>
+            <th class="!text-end">DATE</th>
           </tr>
         </thead>
         <tbody>
@@ -107,9 +107,9 @@ const prevPage = () => {
     </Card>
 
     <div class="pager">
-      <Button variant="ghost" @click="prevPage" :disabled="page === 1">[ Prev ]</Button>
-      <div class="hint">Page {{ page }} / {{ meta.totalPages || 1 }} · Total {{ meta.total ?? '—' }}</div>
-      <Button variant="ghost" @click="nextPage" :disabled="meta.totalPages && page >= meta.totalPages">[ Next ]</Button>
+      <Button variant="ghost" @click="prevPage" :disabled="page === 1">PREV</Button>
+      <div class="hint">PAGE {{ page }} / {{ meta.totalPages || 1 }} · TOTAL {{ meta.total ?? '—' }}</div>
+      <Button variant="ghost" @click="nextPage" :disabled="meta.totalPages && page >= meta.totalPages">NEXT</Button>
     </div>
   </section>
 </template>

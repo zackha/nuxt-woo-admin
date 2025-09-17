@@ -15,7 +15,7 @@ export type Product = {
 
 export type ProductDetail = Product & {
   images: Array<{ id: number; src: string; alt: string }>;
-  short_description: string; // HTML’siz sade metin (server'da strip edildi)
+  description: string; // HTML’siz sade metin (server'da strip edildi)
 };
 
 export const useProducts = () => {

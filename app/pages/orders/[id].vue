@@ -40,14 +40,15 @@ async function handleAddNote() {
 </script>
 
 <template>
-  <section class="space-y-6">
-    <div><NuxtLink to="/orders">← Back</NuxtLink></div>
-
+  <section class="space-y-3">
     <div v-if="error" class="text-sm" style="color: var(--danger)">{{ (error as any).message }}</div>
     <div v-else-if="pending" class="loading">Loading</div>
 
     <div v-else-if="order" class="space-y-4">
-      <h1 class="text-lg">Order #{{ order.id }}</h1>
+      <div class="flex items-center space-x-2">
+        <div><NuxtLink to="/orders">←</NuxtLink></div>
+        <h1 class="text-lg">Order #{{ order.id }}</h1>
+      </div>
 
       <div class="grid md:grid-cols-2 gap-4">
         <div class="card">

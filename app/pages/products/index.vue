@@ -85,11 +85,11 @@ function stockText(p: any) {
         <thead>
           <tr>
             <th>ID</th>
-            <th>Item</th>
-            <th>Price</th>
-            <th>Stock</th>
-            <th>Status</th>
-            <th>Date</th>
+            <th class="px-3">Item</th>
+            <th class="px-3">Price</th>
+            <th class="px-3">Stock</th>
+            <th class="px-3">Status</th>
+            <th class="pl-3 !text-end">Date</th>
           </tr>
         </thead>
         <tbody>
@@ -97,24 +97,24 @@ function stockText(p: any) {
             <td class="py-2">
               <NuxtLink :to="`/products/${p.id}`">#{{ p.id }}</NuxtLink>
             </td>
-            <td class="py-2 flex items-center gap-3">
+            <td class="py-2 flex items-center gap-3 px-3">
               <img v-if="p.image" :src="p.image.src" :alt="p.image.alt" class="border" style="width: 40px; height: 40px; object-fit: cover; border-color: var(--line)" />
-              <span class="truncate max-w-[360px]">{{ p.name }}</span>
+              <span class="truncate max-w-52 block">{{ p.name }}</span>
             </td>
-            <td class="py-2">{{ priceText(p) }}</td>
-            <td class="py-2">
+            <td class="py-2 px-3">{{ priceText(p) }}</td>
+            <td class="py-2 px-3">
               <span class="badge">
                 <span class="badge-dot"></span>
                 {{ stockText(p) }}
               </span>
             </td>
-            <td class="py-2">
+            <td class="py-2 px-3">
               <span :class="statusBadge(p.status)">
                 <span class="badge-dot"></span>
                 {{ p.status }}
               </span>
             </td>
-            <td class="py-2">{{ new Date(p.date_created).toLocaleString() }}</td>
+            <td class="py-2 pl-3 text-end">{{ new Date(p.date_created).toLocaleString() }}</td>
           </tr>
         </tbody>
       </table>

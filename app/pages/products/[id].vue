@@ -74,8 +74,8 @@ function priceBlock(p: any) {
         </div>
 
         <div class="card">
-          <h2 class="mb-2">Short Description</h2>
-          <p class="text-sm whitespace-pre-line">{{ product.short_description || '—' }}</p>
+          <h2 class="mb-2">Description</h2>
+          <p class="text-sm whitespace-pre-line">{{ product.description || '—' }}</p>
         </div>
       </div>
     </div>

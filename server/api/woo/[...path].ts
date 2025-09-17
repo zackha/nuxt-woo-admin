@@ -97,7 +97,7 @@ function shapeProductDetail(p: any) {
   return {
     ...shapeProductListItem(p),
     images: Array.isArray(p?.images) ? p.images.map((img: any) => ({ id: img.id, src: img.src, alt: img.alt || img.name || '' })) : [],
-    short_description: stripHtml(p.short_description || ''),
+    description: stripHtml(p.description || ''),
   };
 }
 

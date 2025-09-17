@@ -9,7 +9,7 @@
   --ink: #fff; /* ana metin */
   --ink-dim: #cfcfcf; /* ikincil metin */
 
-  --line: #414141; /* tüm çizgiler TAM BEYAZ */
+  --line: #1f1f1f; /* tüm çizgiler TAM BEYAZ */
   --line-soft: #fff;
 
   --accent: #fff; /* vurgular da beyaz */
@@ -152,8 +152,8 @@ a:hover {
 
 .controls {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+  flex-flow: row;
+  gap: 1rem;
   align-items: center;
 }
 .hint {
@@ -179,12 +179,13 @@ a:hover {
   background: #000;
   color: var(--ink);
   border: 1px solid var(--line);
-  border-radius: 0px;
+  border-radius: 99px;
 }
 .badge-dot {
   width: 6px;
   height: 6px;
   background: #fff;
+  border-radius: 99px;
 }
 .badge--ok {
   border-style: solid;

@@ -29,7 +29,7 @@ const products = computed(() => productsRes.value?.data || []);
         <NuxtLink to="/orders" class="link hud-title">VIEW ALL</NuxtLink>
       </div>
       <Card>
-        <div v-if="!orders.length" class="loading h-64">Loading</div>
+        <div v-if="!orders.length" class="h-64 w-auto bg-white/5 animate-pulse"></div>
         <div v-else-if="ordersError" class="err">{{ (ordersError as any).message }}</div>
         <div v-else>
           <Table fixed>
@@ -83,7 +83,7 @@ const products = computed(() => productsRes.value?.data || []);
         <NuxtLink to="/products" class="link hud-title">VIEW ALL</NuxtLink>
       </div>
       <Card>
-        <div v-if="!products.length" class="loading h-64">Loading</div>
+        <div v-if="!products.length" class="h-64 w-auto bg-white/5 animate-pulse"></div>
         <div v-else-if="productsError" class="err">{{ (productsError as any).message }}</div>
         <div v-else>
           <Table fixed>

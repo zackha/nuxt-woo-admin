@@ -21,6 +21,7 @@ export function shapeOrderListItem(o: any) {
       first_name: o?.billing?.first_name ?? undefined,
       last_name: o?.billing?.last_name ?? undefined,
       email: o?.billing?.email ?? undefined,
+      phone: o?.billing?.phone ?? undefined,
     },
   };
 }

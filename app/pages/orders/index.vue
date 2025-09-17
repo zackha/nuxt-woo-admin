@@ -22,7 +22,7 @@ const statuses = [
 ];
 
 const { list } = useOrders();
-const { data, pending, error } = useAsyncData(
+const { data, error } = useAsyncData(
   () => list({ page: page.value, per_page: perPage, search: search.value || undefined, status: status.value === 'any' ? undefined : status.value }),
   { watch: [page, search, status], lazy: true, server: false, default: () => ({ data: [], meta: {} }) }
 );
@@ -44,16 +44,14 @@ const prevPage = () => {
 <template>
   <section class="space-y-4">
     <div class="controls">
-      <input v-model="search" placeholder="SEARCH (ORDER/EMAIL)" class="input w-64" />
-      <select v-model="status" class="input">
+      <input v-model="search" placeholder="SEARCH (ORDER/EMAIL)" class="input" />
+      <select v-model="status" class="input !w-32">
         <option v-for="s in statuses" :key="s.value" :value="s.value">{{ s.label.toUpperCase() }}</option>
       </select>
-      <span class="hint">PER PAGE: {{ perPage }}</span>
     </div>
 
-    <div v-if="error" class="err">{{ (error as any).message }}</div>
-    <div v-else-if="pending" class="loading h-64">Loading</div>
-
+    <div v-if="!items.length" class="h-64 w-auto animate-pulse bg-white/5"></div>
+    <div v-else-if="error" class="err">{{ (error as any).message }}</div>
     <Card v-else class="overflow-x-auto">
       <Table fixed>
         <colgroup>

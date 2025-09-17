@@ -1,55 +1,35 @@
 <script setup lang="ts">
-const route = useRoute();
-const id = route.params.id as string;
-
+const id = useRoute().params.id as string;
 const { getById } = useProducts();
 
 const { data: res, pending, error } = useAsyncData(() => getById(id), { lazy: true, server: false, default: () => ({ data: null }) });
 const product = computed(() => res.value?.data);
 
-function statusBadge(s: string) {
-  if (s === 'publish') return 'badge badge--ok';
-  if (s === 'draft' || s === 'pending') return 'badge badge--warn';
-  if (s === 'private') return 'badge';
-  return 'badge';
-}
-function priceBlock(p: any) {
-  if (!p) return '';
-  if (p.sale_price && p.sale_price !== '0') return `${p.sale_price} (sale) · ~${p.regular_price}~`;
-  return p.price || p.regular_price || '—';
-}
+const priceBlock = (p: any) => (!p ? '' : p.sale_price && p.sale_price !== '0' ? `${p.sale_price} (sale) · ~${p.regular_price}~` : p.price || p.regular_price || '—');
 </script>
 
 <template>
   <section class="space-y-6">
     <div><NuxtLink to="/products">← Back</NuxtLink></div>
 
-    <div v-if="error" class="text-sm" style="color: var(--danger)">{{ (error as any).message }}</div>
+    <div v-if="error" class="err">{{ (error as any).message }}</div>
     <div v-else-if="pending" class="loading">Loading</div>
 
     <div v-else-if="product" class="space-y-4">
       <h1 class="text-lg">{{ product.name }}</h1>
 
-      <!-- Gallery -->
       <div class="card">
         <div class="flex gap-3 overflow-x-auto">
-          <img
-            v-for="img in product.images"
-            :key="img.id"
-            :src="img.src"
-            :alt="img.alt"
-            class="border rounded"
-            style="width: 120px; height: 120px; object-fit: cover; border-color: var(--line)" />
-          <div v-if="!product.images?.length" class="opacity-60 text-sm">No image</div>
+          <img v-for="img in product.images" :key="img.id" :src="img.src" :alt="img.alt" class="thumb-xl" />
+          <div v-if="!product.images?.length" class="empty">No image</div>
         </div>
       </div>
 
-      <!-- Basics -->
       <div class="grid md:grid-cols-2 gap-4">
         <div class="card text-sm space-y-1">
           <div>
             Status:
-            <span :class="statusBadge(product.status)">
+            <span :class="productBadge(product.status)">
               <span class="badge-dot"></span>
               {{ product.status }}
             </span>

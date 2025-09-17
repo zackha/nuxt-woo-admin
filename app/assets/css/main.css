@@ -1,144 +1,94 @@
 @import 'tailwindcss';
 
 :root {
-  --bg: #f7f5ec; /* sarımsı eski kağıt */
-  --fg: #232323; /* koyu gri metin */
-  --fg-dim: #4b4b4b; /* ikincil metin */
-  --line: #1f293745; /* düşük opak çizgi */
-  --accent: #2f7d32; /* loş yeşil (terminal hissi) */
+  --bg: #f7f5ec;
+  --fg: #232323;
+  --fg-dim: #4b4b4b;
+  --line: #1f293745;
+  --accent: #2f7d32;
   --accent-weak: #2f7d3233;
-  --badge: #e6e2cf; /* soluk etiket zemini */
+  --badge: #e6e2cf;
   --danger: #8b1e1e;
 }
 
 html,
 body {
-  @apply min-h-screen;
+  min-height: 100%;
   background: var(--bg);
   color: var(--fg);
-  font-family: 'VT323', 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
   letter-spacing: 0.2px;
 }
-
-/* Hafif CRT scanline efekti (çok düşük opaklıkta) */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background: repeating-linear-gradient(to bottom, transparent 0px, transparent 2px, #00000008 3px, transparent 4px);
-  mix-blend-mode: multiply;
-}
-
-/* Basit grid çerçeve */
 .container-retro {
-  @apply mx-auto w-full;
   max-width: 46rem;
-  background: linear-gradient(var(--accent-weak), var(--accent-weak)) padding-box, linear-gradient(180deg, transparent, transparent) border-box;
+  margin: 0 auto;
+  background: linear-gradient(var(--accent-weak), var(--accent-weak)) padding-box;
   border-radius: 10px;
-  box-shadow: 0 0 0 1px var(--line) inset, 0 5px 20px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 0 1px var(--line) inset, 0 5px 20px #0000000d;
   overflow: hidden;
 }
-
-/* Header */
 .retro-header {
-  @apply flex items-center justify-between gap-3 px-4 py-3 border;
-  border-color: var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--line);
   background: color-mix(in oklab, var(--bg) 90%, var(--accent) 10%);
-  border-radius: 10px 10px 0px 0px;
 }
 .brand {
-  @apply text-lg;
+  font-size: 1.05rem;
   letter-spacing: 1px;
 }
 .brand::before {
   content: '> ';
   color: var(--accent);
 }
-
-/* Links */
-a {
-  text-decoration-thickness: 0.08rem;
-  text-underline-offset: 0.2rem;
+.link {
+  opacity: 0.8;
 }
-a:hover {
-  color: var(--accent);
+.link:hover {
+  opacity: 1;
 }
 
-/* Inputs & Selects */
-.input {
-  @apply px-3 py-2 text-sm rounded outline-none;
+.card {
   border: 1px solid var(--line);
-  background: transparent;
-  color: var(--fg);
+  border-radius: 10px;
+  padding: 0.75rem;
+  background: color-mix(in oklab, var(--bg) 94%, var(--accent) 6%);
 }
-.input:focus {
-  box-shadow: 0 0 0 3px var(--accent-weak);
-}
-
-/* Buttons */
-.btn {
-  @apply inline-flex items-center justify-center px-3 py-1 text-sm rounded transition;
-  border: 1px dashed var(--fg-dim);
-  background: transparent;
-}
-.btn:hover {
-  background: var(--accent-weak);
-}
-.btn:disabled {
-  opacity: 0.5;
-}
-.btn-ghost {
-  border-style: solid;
-  border-color: var(--line);
-}
-.btn-strong {
-  border-style: solid;
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-/* Table */
 .table {
-  @apply w-full text-sm border-collapse;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+.table th {
+  color: var(--fg-dim);
+  text-align: left;
+  padding: 0.5rem 0.25rem;
+}
+.table td {
+  padding: 0.5rem 0.25rem;
 }
 .table thead tr {
   border-bottom: 1px solid var(--line);
 }
-.table th {
-  @apply text-left py-2;
-  color: var(--fg-dim);
+.row {
+  border-bottom: 1px solid var(--line);
 }
-.table td {
-  @apply py-2;
+.empty {
+  opacity: 0.6;
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 0.75rem 0;
 }
-
-/* Badges (ASCII vibe) */
-.badge {
-  @apply inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded;
-  background: var(--badge);
-  border: 1px solid var(--line);
+.err {
+  color: var(--danger);
+  font-size: 0.9rem;
 }
-.badge-dot {
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  background: var(--fg-dim);
-}
-.badge--ok .badge-dot {
-  background: var(--accent);
-}
-.badge--warn .badge-dot {
-  background: #c9a227;
-}
-.badge--err .badge-dot {
-  background: var(--danger);
-}
-
-/* Loading (ASCII dots) */
 .loading {
-  @apply text-sm opacity-70;
+  opacity: 0.7;
+  font-size: 0.9rem;
 }
 .loading::after {
   content: '…';
@@ -161,15 +111,107 @@ a:hover {
   }
 }
 
-/* Cards */
-.card {
-  @apply border rounded p-3;
+.input {
+  padding: 0.5rem 0.6rem;
+  font-size: 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--fg);
+}
+.input:focus {
+  box-shadow: 0 0 0 3px var(--accent-weak);
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  border: 1px dashed var(--fg-dim);
+  background: transparent;
+  transition: opacity 0.15s;
+}
+.btn:hover {
+  background: var(--accent-weak);
+}
+.btn-ghost {
+  border-style: solid;
   border-color: var(--line);
-  background: color-mix(in oklab, var(--bg) 94%, var(--accent) 6%);
+}
+.btn-strong {
+  border-style: solid;
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+.hint {
+  font-size: 0.78rem;
+  opacity: 0.7;
+}
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-/* Footer line */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.15rem 0.45rem;
+  font-size: 0.75rem;
+  border-radius: 999px;
+  background: var(--badge);
+  border: 1px solid var(--line);
+}
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--fg-dim);
+}
+.badge--ok .badge-dot {
+  background: var(--accent);
+}
+.badge--warn .badge-dot {
+  background: #c9a227;
+}
+.badge--err .badge-dot {
+  background: var(--danger);
+}
+
+.thumb {
+  width: 28px;
+  height: 28px;
+  object-fit: cover;
+  border: 1px solid var(--line);
+}
+.thumb-lg {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border: 1px solid var(--line);
+}
+.thumb-xl {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
 .footer {
-  @apply mt-6 py-4 text-xs text-center opacity-70;
+  margin-top: 1rem;
+  padding: 1rem 0;
+  text-align: center;
+  font-size: 0.8rem;
+  opacity: 0.7;
   border-top: 1px solid var(--line);
 }

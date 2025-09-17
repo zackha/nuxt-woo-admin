@@ -1,4 +1,3 @@
-// app/composables/useOrders.ts
 export type Order = {
   id: number;
   status: string;
@@ -11,30 +10,10 @@ export type Order = {
 
 export const useOrders = () => {
   const { call } = useWoo();
-
-  // /api/woo/orders -> wc/v3/orders
-  const list = async (params: { page?: number; per_page?: number; status?: string; search?: string }) => {
-    return call<Order[]>(`/orders`, { method: 'GET', query: params });
-  };
-
-  const getById = async (id: string | number) => {
-    return call<Order>(`/orders/${id}`, { method: 'GET' });
-  };
-
-  const getNotes = async (id: string | number) => {
-    return call<any[]>(`/orders/${id}/notes`, { method: 'GET' });
-  };
-
-  const updateStatus = async (id: string | number, status: string) => {
-    return call<Order>(`/orders/${id}`, { method: 'PUT', body: { status } });
-  };
-
-  const addNote = async (id: string | number, note: string) => {
-    return call(`/orders/${id}/notes`, {
-      method: 'POST',
-      body: { note, customer_note: false },
-    });
-  };
-
+  const list = (params: { page?: number; per_page?: number; status?: string; search?: string }) => call<Order[]>(`/orders`, { method: 'GET', query: params });
+  const getById = (id: string | number) => call<Order>(`/orders/${id}`, { method: 'GET' });
+  const getNotes = (id: string | number) => call<any[]>(`/orders/${id}/notes`, { method: 'GET' });
+  const updateStatus = (id: string | number, status: string) => call<Order>(`/orders/${id}`, { method: 'PUT', body: { status } });
+  const addNote = (id: string | number, note: string) => call(`/orders/${id}/notes`, { method: 'POST', body: { note, customer_note: false } });
   return { list, getById, getNotes, updateStatus, addNote };
 };

@@ -1,9 +1,4 @@
-// app/composables/useWoo.ts
-export type FetchOptions = {
-  method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
-  query?: Record<string, any>;
-  body?: any;
-};
+export type FetchOptions = { method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'; query?: Record<string, any>; body?: any };
 
 export const useWoo = () => {
   const call = async <T = any>(path: string, opts: FetchOptions = {}) => {
@@ -13,6 +8,5 @@ export const useWoo = () => {
       body: opts.body,
     });
   };
-
   return { call };
 };

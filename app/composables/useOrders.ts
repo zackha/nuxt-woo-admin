@@ -14,23 +14,23 @@ export const useOrders = () => {
   const { call } = useWoo();
 
   const list = async (params: { page?: number; per_page?: number; status?: string; search?: string }) => {
-    return call<Order[]>(`wc/v3/orders`, { method: 'GET', query: params });
+    return call<Order[]>(`/orders`, { method: 'GET', query: params });
   };
 
   const getById = async (id: string | number) => {
-    return call<Order>(`wc/v3/orders/${id}`, { method: 'GET' });
+    return call<Order>(`/orders/${id}`, { method: 'GET' });
   };
 
   const getNotes = async (id: string | number) => {
-    return call<any[]>(`wc/v3/orders/${id}/notes`, { method: 'GET' });
+    return call<any[]>(`/orders/${id}/notes`, { method: 'GET' });
   };
 
   const updateStatus = async (id: string | number, status: string) => {
-    return call<Order>(`wc/v3/orders/${id}`, { method: 'PUT', body: { status } });
+    return call<Order>(`/orders/${id}`, { method: 'PUT', body: { status } });
   };
 
   const addNote = async (id: string | number, note: string) => {
-    return call(`wc/v3/orders/${id}/notes`, {
+    return call(`/orders/${id}/notes`, {
       method: 'POST',
       body: { note, customer_note: false },
     });

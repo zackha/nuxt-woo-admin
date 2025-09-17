@@ -8,16 +8,9 @@ export default defineEventHandler(async event => {
   const raw = (event.context.params?.path ?? '') as string | string[];
   const subpath = Array.isArray(raw) ? raw.join('/') : raw;
 
-  if (!subpath || !subpath.startsWith('wc/')) {
-    throw createError({ statusCode: 400, statusMessage: 'Path not allowed. Must start with wc/*' });
-  }
-
   const base = String(cfg.wcUrl || '').replace(/\/+$/, '');
-  if (!base) {
-    throw createError({ statusCode: 500, statusMessage: 'Woo base URL is not configured' });
-  }
 
-  const url = `${base}/${subpath}`; // örn: https://shop.com/wc/v3/orders
+  const url = `${base}/wp-json/wc/v3${subpath}`; // örn: https://shop.com/wp-json/wc/v3/orders
   const query = getQuery(event);
   const body = ['POST', 'PUT', 'PATCH', 'DELETE'].includes(method) ? await readBody(event) : undefined;
 

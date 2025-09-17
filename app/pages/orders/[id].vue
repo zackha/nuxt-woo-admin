@@ -16,6 +16,7 @@ const newStatus = ref('processing');
 watch(order, o => {
   if (o?.status) newStatus.value = o.status;
 });
+
 const noteText = ref('');
 
 async function handleStatusUpdate() {
@@ -26,7 +27,6 @@ async function handleStatusUpdate() {
     alert(e?.message || 'Failed to update status');
   }
 }
-
 async function handleAddNote() {
   if (!noteText.value.trim()) return;
   try {
@@ -40,20 +40,18 @@ async function handleAddNote() {
 </script>
 
 <template>
-  <div class="space-y-6">
-    <div>
-      <NuxtLink to="/orders" class="underline">← Back to Orders</NuxtLink>
-    </div>
+  <section class="space-y-6">
+    <div><NuxtLink to="/orders">← Back</NuxtLink></div>
 
-    <div v-if="error" class="text-red-600 text-sm">{{ (error as any).message }}</div>
-    <div v-else-if="pending" class="text-sm opacity-70">Loading…</div>
+    <div v-if="error" class="text-sm" style="color: var(--danger)">{{ (error as any).message }}</div>
+    <div v-else-if="pending" class="loading">Loading</div>
 
     <div v-else-if="order" class="space-y-4">
-      <h1 class="text-lg font-semibold">Order #{{ order.id }}</h1>
+      <h1 class="text-lg">Order #{{ order.id }}</h1>
 
       <div class="grid md:grid-cols-2 gap-4">
-        <div class="border rounded p-3">
-          <h2 class="font-semibold mb-2">Summary</h2>
+        <div class="card">
+          <h2 class="mb-2">Summary</h2>
           <div class="text-sm space-y-1">
             <div>
               Status:
@@ -67,8 +65,8 @@ async function handleAddNote() {
           </div>
         </div>
 
-        <div class="border rounded p-3">
-          <h2 class="font-semibold mb-2">Customer</h2>
+        <div class="card">
+          <h2 class="mb-2">Customer</h2>
           <div class="text-sm space-y-1">
             <div>{{ [order.billing?.first_name, order.billing?.last_name].filter(Boolean).join(' ') || '—' }}</div>
             <div>{{ order.billing?.email || '—' }}</div>
@@ -76,51 +74,53 @@ async function handleAddNote() {
         </div>
       </div>
 
-      <div class="border rounded p-3">
-        <h2 class="font-semibold mb-2">Line Items</h2>
-        <table class="w-full text-sm border-collapse">
-          <thead>
-            <tr class="border-b">
-              <th class="table-th">Name</th>
-              <th class="table-th">Qty</th>
-              <th class="table-th">Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="li in order.line_items || []" :key="li.id" class="border-b">
-              <td class="table-td">{{ li.name }}</td>
-              <td class="table-td">{{ li.quantity }}</td>
-              <td class="table-td">{{ li.total }}</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="card">
+        <h2 class="mb-2">Line Items</h2>
+        <div class="overflow-x-auto">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Qty</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="li in order.line_items || []" :key="li.id" class="border-b" :style="{ borderColor: 'var(--line)' }">
+                <td class="py-2">{{ li.name }}</td>
+                <td class="py-2">{{ li.quantity }}</td>
+                <td class="py-2">{{ li.total }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <div class="grid md:grid-cols-2 gap-4">
-        <div class="border rounded p-3 space-y-2">
-          <h2 class="font-semibold">Update Status</h2>
+        <div class="card space-y-2">
+          <h2>Update Status</h2>
           <select v-model="newStatus" class="input mr-2">
             <option v-for="s in statuses" :key="s" :value="s">{{ s }}</option>
           </select>
-          <button @click="handleStatusUpdate" class="btn">Update</button>
+          <button @click="handleStatusUpdate" class="btn btn-strong">[ Update ]</button>
         </div>
 
-        <div class="border rounded p-3 space-y-2">
-          <h2 class="font-semibold">Add Note</h2>
-          <textarea v-model="noteText" rows="3" class="input w-full" placeholder="Internal note…" />
-          <button @click="handleAddNote" class="btn">Add Note</button>
+        <div class="card space-y-2">
+          <h2>Add Note</h2>
+          <textarea v-model="noteText" rows="3" class="input w-full" placeholder="Internal note…"></textarea>
+          <button @click="handleAddNote" class="btn btn-ghost">[ Add Note ]</button>
         </div>
       </div>
 
-      <div class="border rounded p-3">
-        <h2 class="font-semibold mb-2">Notes</h2>
+      <div class="card">
+        <h2 class="mb-2">Notes</h2>
         <ul class="text-sm space-y-2">
-          <li v-for="n in notes" :key="n.id" class="border rounded p-2">
+          <li v-for="n in notes" :key="n.id" class="border rounded p-2" :style="{ borderColor: 'var(--line)' }">
             <div class="opacity-60 text-xs">{{ new Date(n.date_created).toLocaleString() }}</div>
             <div>{{ n.note }}</div>
           </li>
         </ul>
       </div>
     </div>
-  </div>
+  </section>
 </template>

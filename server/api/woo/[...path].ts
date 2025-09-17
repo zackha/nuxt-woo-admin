@@ -15,7 +15,6 @@ export default defineEventHandler(async event => {
   const query = getQuery(event);
   const body = ['POST', 'PUT', 'PATCH', 'DELETE'].includes(method) ? await readBody(event) : undefined;
 
-  // Basic Auth
   const auth = Buffer.from(`${cfg.wcKey}:${cfg.wcSecret}`, 'utf-8').toString('base64');
 
   try {

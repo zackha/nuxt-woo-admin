@@ -1,28 +1,175 @@
 @import 'tailwindcss';
 
-/* Minimal dokunuşlar */
 :root {
-  color-scheme: light dark;
+  --bg: #f7f5ec; /* sarımsı eski kağıt */
+  --fg: #232323; /* koyu gri metin */
+  --fg-dim: #4b4b4b; /* ikincil metin */
+  --line: #1f293745; /* düşük opak çizgi */
+  --accent: #2f7d32; /* loş yeşil (terminal hissi) */
+  --accent-weak: #2f7d3233;
+  --badge: #e6e2cf; /* soluk etiket zemini */
+  --danger: #8b1e1e;
 }
+
 html,
 body {
-  @apply min-h-screen bg-white text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100;
+  @apply min-h-screen;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'VT323', 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  letter-spacing: 0.2px;
 }
+
+/* Hafif CRT scanline efekti (çok düşük opaklıkta) */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(to bottom, transparent 0px, transparent 2px, #00000008 3px, transparent 4px);
+  mix-blend-mode: multiply;
+}
+
+/* Basit grid çerçeve */
+.container-retro {
+  @apply mx-auto w-full;
+  max-width: 46rem;
+  background: linear-gradient(var(--accent-weak), var(--accent-weak)) padding-box, linear-gradient(180deg, transparent, transparent) border-box;
+  border-radius: 10px;
+  box-shadow: 0 0 0 1px var(--line) inset, 0 5px 20px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+/* Header */
+.retro-header {
+  @apply flex items-center justify-between gap-3 px-4 py-3 border;
+  border-color: var(--line);
+  background: color-mix(in oklab, var(--bg) 90%, var(--accent) 10%);
+  border-radius: 10px 10px 0px 0px;
+}
+.brand {
+  @apply text-lg;
+  letter-spacing: 1px;
+}
+.brand::before {
+  content: '> ';
+  color: var(--accent);
+}
+
+/* Links */
 a {
-  @apply underline-offset-2 decoration-neutral-400 hover:decoration-neutral-600 transition;
+  text-decoration-thickness: 0.08rem;
+  text-underline-offset: 0.2rem;
 }
-.table-th {
-  @apply text-left py-2 font-medium text-neutral-600 dark:text-neutral-300;
+a:hover {
+  color: var(--accent);
 }
-.table-td {
+
+/* Inputs & Selects */
+.input {
+  @apply px-3 py-2 text-sm rounded outline-none;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--fg);
+}
+.input:focus {
+  box-shadow: 0 0 0 3px var(--accent-weak);
+}
+
+/* Buttons */
+.btn {
+  @apply inline-flex items-center justify-center px-3 py-1 text-sm rounded transition;
+  border: 1px dashed var(--fg-dim);
+  background: transparent;
+}
+.btn:hover {
+  background: var(--accent-weak);
+}
+.btn:disabled {
+  opacity: 0.5;
+}
+.btn-ghost {
+  border-style: solid;
+  border-color: var(--line);
+}
+.btn-strong {
+  border-style: solid;
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Table */
+.table {
+  @apply w-full text-sm border-collapse;
+}
+.table thead tr {
+  border-bottom: 1px solid var(--line);
+}
+.table th {
+  @apply text-left py-2;
+  color: var(--fg-dim);
+}
+.table td {
   @apply py-2;
 }
-.input {
-  @apply border px-3 py-2 text-sm rounded outline-none focus:ring-2 focus:ring-neutral-300 dark:focus:ring-neutral-700 bg-transparent;
-}
-.btn {
-  @apply border px-3 py-1 rounded text-sm hover:bg-neutral-50 dark:hover:bg-neutral-900 transition disabled:opacity-50;
-}
+
+/* Badges (ASCII vibe) */
 .badge {
-  @apply inline-flex items-center rounded-full px-2 py-0.5 text-xs border;
+  @apply inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded;
+  background: var(--badge);
+  border: 1px solid var(--line);
+}
+.badge-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--fg-dim);
+}
+.badge--ok .badge-dot {
+  background: var(--accent);
+}
+.badge--warn .badge-dot {
+  background: #c9a227;
+}
+.badge--err .badge-dot {
+  background: var(--danger);
+}
+
+/* Loading (ASCII dots) */
+.loading {
+  @apply text-sm opacity-70;
+}
+.loading::after {
+  content: '…';
+  animation: dots 1.2s steps(4, end) infinite;
+}
+@keyframes dots {
+  0%,
+  20% {
+    content: '   ';
+  }
+  40% {
+    content: '.';
+  }
+  60% {
+    content: '..';
+  }
+  80%,
+  100% {
+    content: '...';
+  }
+}
+
+/* Cards */
+.card {
+  @apply border rounded p-3;
+  border-color: var(--line);
+  background: color-mix(in oklab, var(--bg) 94%, var(--accent) 6%);
+}
+
+/* Footer line */
+.footer {
+  @apply mt-6 py-4 text-xs text-center opacity-70;
+  border-top: 1px solid var(--line);
 }

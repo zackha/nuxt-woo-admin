@@ -27,4 +27,5 @@ export default defineNuxtConfig({
     plugins: [tailwindcss()],
   },
   css: ['~/assets/css/main.css'],
+  nitro: { preset: 'vercel' },
 });

@@ -6,7 +6,7 @@
         <NuxtLink to="/" class="brand">NuxtCommerce Admin</NuxtLink>
         <nav class="flex items-center gap-3 text-sm">
           <NuxtLink to="/orders" class="hover:opacity-100 opacity-80">Orders</NuxtLink>
-          <!-- İlerde: <NuxtLink to="/products" class="opacity-80 hover:opacity-100">Products</NuxtLink> -->
+          <NuxtLink to="/products" class="hover:opacity-100 opacity-80">Products</NuxtLink>
         </nav>
       </header>
 

@@ -2,7 +2,7 @@
 const id = useRoute().params.id as string;
 const { getById, getNotes, updateStatus, addNote } = useOrders();
 
-const { data: orderRes, pending, error, refresh } = useAsyncData(() => getById(id), { lazy: true, server: false, default: () => ({ data: null }) });
+const { data: orderRes, pending, error } = useAsyncData(() => getById(id), { lazy: true, server: false, default: () => ({ data: null }) });
 const order = computed(() => orderRes.value?.data);
 
 const { data: notesRes, refresh: refreshNotes } = useAsyncData(() => getNotes(id), { lazy: true, server: false, default: () => ({ data: [] }) });
@@ -14,17 +14,38 @@ watch(order, o => {
   if (o?.status) newStatus.value = o.status;
 });
 const noteText = ref('');
+const updatingStatus = ref(false);
+const addingNote = ref(false);
 
 async function handleStatusUpdate() {
-  await updateStatus(id, newStatus.value);
-  await refresh();
+  if (!order.value) return;
+  try {
+    updatingStatus.value = true;
+    await updateStatus(id, newStatus.value);
+    if (orderRes.value?.data) {
+      orderRes.value = { ...orderRes.value, data: { ...orderRes.value.data, status: newStatus.value } };
+    }
+    await refreshNotes();
+  } catch (e: any) {
+    alert(e?.message || 'Failed to update status');
+  } finally {
+    updatingStatus.value = false;
+  }
 }
+
 async function handleAddNote() {
   const v = noteText.value.trim();
   if (!v) return;
-  await addNote(id, v);
-  noteText.value = '';
-  await refreshNotes();
+  try {
+    addingNote.value = true;
+    await addNote(id, v);
+    noteText.value = '';
+    await refreshNotes();
+  } catch (e: any) {
+    alert(e?.message || 'Failed to add note');
+  } finally {
+    addingNote.value = false;
+  }
 }
 </script>
 
@@ -84,15 +105,21 @@ async function handleAddNote() {
       <div class="grid md:grid-cols-2 gap-4">
         <div class="card space-y-2">
           <h2>Update Status</h2>
-          <select v-model="newStatus" class="input">
+          <select v-model="newStatus" class="input" :disabled="updatingStatus">
             <option v-for="s in statuses" :key="s" :value="s">{{ s }}</option>
           </select>
-          <button @click="handleStatusUpdate" class="btn btn-strong">[ Update ]</button>
+          <button @click="handleStatusUpdate" class="btn btn-strong" :disabled="updatingStatus">
+            <template v-if="updatingStatus">[ Updating… ]</template>
+            <template v-else>[ Update ]</template>
+          </button>
         </div>
         <div class="card space-y-2">
           <h2>Add Note</h2>
-          <textarea v-model="noteText" rows="3" class="input w-full" placeholder="Internal note…"></textarea>
-          <button @click="handleAddNote" class="btn btn-ghost">[ Add Note ]</button>
+          <textarea v-model="noteText" rows="3" class="input w-full" placeholder="Internal note…" :disabled="addingNote"></textarea>
+          <button @click="handleAddNote" class="btn btn-ghost" :disabled="addingNote || !noteText.trim()">
+            <template v-if="addingNote">[ Adding… ]</template>
+            <template v-else>[ Add Note ]</template>
+          </button>
         </div>
       </div>
 

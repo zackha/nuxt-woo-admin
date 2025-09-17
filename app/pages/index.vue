@@ -1,1 +1,4 @@
-<template><div>test</div></template>
+<!-- app/pages/index.vue -->
+<template>
+  <div>index</div>
+</template>

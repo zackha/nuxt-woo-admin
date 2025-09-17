@@ -7,7 +7,7 @@ export type FetchOptions = {
 
 export const useWoo = () => {
   const call = async <T = any>(path: string, opts: FetchOptions = {}) => {
-    return $fetch<{ data: T; meta?: any }>(`/api/woo/${path}`, {
+    return $fetch<{ data: T; meta?: any }>(`/api/woo${path}`, {
       method: opts.method || 'GET',
       query: opts.query,
       body: opts.body,

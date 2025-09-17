@@ -10,7 +10,7 @@ export default defineEventHandler(async event => {
 
   const base = String(cfg.wcUrl || '').replace(/\/+$/, '');
 
-  const url = `${base}/wp-json/wc/v3${subpath}`; // örn: https://shop.com/wp-json/wc/v3/orders
+  const url = `${base}/wp-json/wc/v3/${subpath}`; // örn: https://shop.com/wp-json/wc/v3/orders
   const query = getQuery(event);
   const body = ['POST', 'PUT', 'PATCH', 'DELETE'].includes(method) ? await readBody(event) : undefined;
 

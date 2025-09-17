@@ -1,3 +1,4 @@
+// nuxt.config.ts
 import tailwindcss from '@tailwindcss/vite';
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
@@ -7,7 +8,6 @@ export default defineNuxtConfig({
     wcUrl: process.env.NUXT_WC_URL,
     wcKey: process.env.NUXT_WC_KEY,
     wcSecret: process.env.NUXT_WC_SECRET,
-    defaultPerPage: process.env.NUXT_DEFAULT_PER_PAGE,
   },
   app: {
     head: {

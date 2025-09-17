@@ -1,3 +1,4 @@
+<!-- app/app.vue -->
 <template>
   <div class="min-h-screen flex flex-col">
     <header class="px-4 py-3 border-b text-sm font-semibold flex items-center gap-4">

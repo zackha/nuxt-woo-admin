@@ -1,8 +1,8 @@
+<!-- app/pages/orders/index.vue -->
 <script setup lang="ts">
 const route = useRoute();
 const router = useRouter();
-const config = useRuntimeConfig();
-const perPage = Number(process.env.NUXT_DEFAULT_PER_PAGE || config.defaultPerPage || 20);
+const perPage = 20;
 
 const page = ref(Number(route.query.page || 1));
 const search = ref(String(route.query.search || ''));
